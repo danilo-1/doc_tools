@@ -8,7 +8,7 @@ from pdf2image import convert_from_bytes
 import fitz  # PyMuPDF
 import base64
 
-st.set_page_config(page_title="Image2PDF Pro 🚀", layout="wide")
+st.set_page_config(page_title="Image2PDF Pro 🚀", layout="centered")
 
 # Tabs
 (
@@ -20,6 +20,7 @@ st.set_page_config(page_title="Image2PDF Pro 🚀", layout="wide")
     gif_tab,
     extract_images_tab,
     pdf_html_tab,
+    vtt_extrator
 ) = st.tabs(
     [
         "📸 Imagens para PDF",
@@ -30,6 +31,7 @@ st.set_page_config(page_title="Image2PDF Pro 🚀", layout="wide")
         "🎞️ GIF para PDF",
         "🖼️ Extrair Imagens",
         "🌐 PDF para HTML",
+        "📝 Extrator de Legenda(VTT)",
     ]
 )
 
@@ -157,3 +159,55 @@ with pdf_html_tab:
         code_html = f"<!DOCTYPE html><html><embed src='data:application/pdf;base64,{base64.b64encode(pdf_html.getvalue()).decode()}' width='100%' height='800px'/></html>"
         st.html(code_html)
         st.download_button("📥 Baixar HTML", code_html.encode(), "pdf_view.html")
+
+with vtt_extrator:
+    import streamlit as st
+    import requests
+
+    st.title("Extrator de Texto de Legenda (.vtt)")
+
+    st.markdown("""
+    Cole o link direto do arquivo `.vtt` (por exemplo, copiado do console do navegador).
+    O aplicativo vai extrair automaticamente o texto falado e disponibilizar para download.
+    """)
+
+    vtt_url = st.text_input("URL da legenda (.vtt)", placeholder="Cole aqui o link direto do Firebase")
+
+    idiomas_visuais = {
+        "Português (Brasil)": "pt-BR",
+        "Inglês (EUA)": "en-US",
+        "Espanhol": "es"
+    }
+    st.selectbox("Idioma da legenda (visual)", list(idiomas_visuais.keys()))
+
+
+    def extract_spoken_text(vtt_data):
+        lines = vtt_data.splitlines()
+        text_lines = []
+        for line in lines:
+            if "-->" in line or line.strip() == "" or line.strip().isdigit():
+                continue
+            text_lines.append(line.strip())
+        return "\n".join(text_lines)
+
+    if vtt_url:
+        try:
+            response = requests.get(vtt_url)
+            response.raise_for_status()
+            vtt_content = response.content.decode("utf-8")
+            spoken_text = extract_spoken_text(vtt_content)
+
+            st.success("Texto extraído com sucesso!")
+            st.download_button(
+                label="Baixar Texto Extraído (.txt)",
+                data=spoken_text,
+                file_name="legenda_extraida.txt",
+                mime="text/plain"
+            )
+
+            with st.expander("Visualizar texto extraído"):
+                st.text_area("Conteúdo", spoken_text, height=300)
+        except Exception as e:
+            st.error(f"Erro ao baixar ou processar o arquivo: {e}")
+    else:
+        st.info("Cole o link da legenda para iniciar o processo.")

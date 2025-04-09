@@ -35,7 +35,7 @@ O **KitDoDia** é um conjunto de ferramentas pensado para facilitar e agilizar o
 1. **Clone o repositório**:
 
    ```sh
-   git clone https://seu-repositorio-url.git
+   git clone https://github.com/danilo-1/doc_tools.git
    ```
 
 2. **Instale as dependências**:

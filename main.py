@@ -1,25 +1,32 @@
 import streamlit as st
 
+# inserindo o logo do projeto
 
-st.set_page_config(page_title="Image2PDF Pro 🚀", layout="centered")
+
+st.set_page_config(page_title="KitDoDia", layout="centered", initial_sidebar_state="expanded", page_icon="logo_full_kitdodia.png")
 
 side = st.sidebar
 
+side.image("logo_full_kitdodia.png")
 pages = {
     "Tools to PDF": [
-        st.Page("tools/image_to_pdf.py", title="Image2PDF Pro 🚀", icon="📄"),
+        st.Page("tools/image_to_pdf.py", title="Image2PDF", icon="📄"),
         st.Page("tools/pdf_darkmode.py", title="darkmode", icon="🌙"),
         st.Page("tools/secure_pdf.py", title="Secure PDF", icon="🔒"),
         st.Page("tools/merge_split_pdf.py", title="Merge/Split PDF", icon="🔀"),
         st.Page("tools/ocr_docling.py", title="OCR Docling", icon="🖼️"),
-        st.Page("tools/gif_to_pdf.py", title="GIF to PDF", icon="🎞️"),
+        st.Page("tools/gif_to_pdf.py", title="GIF2PDF", icon="🎞️"),
         st.Page("tools/extract_image.py", title="Extract Images", icon="🖼️"),
         st.Page("tools/pdf_to_html.py", title="PDF to HTML", icon="🌐"),
     ],
-    "Captions of videos": [
+    "Tools to Image": [
+        st.Page("tools/remove_background.py", title="Remove Background", icon="🪄"),
+    ],
+    "Tools of videos": [
         st.Page("tools/captions_vtt.py", title="Legenda (.vtt)", icon="📝"),
         st.Page("tools/audio_video_whisper.py", title="Áudio/Vídeo (Whisper)", icon="🎤"),
     ],
+
 }
 pg = st.navigation(pages)
 pg.run()

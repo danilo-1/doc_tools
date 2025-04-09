@@ -65,7 +65,7 @@ def run_app():
     # Seleção de como fornecer o áudio
     opcao_input = st.radio(
         "Como deseja fornecer o áudio?",
-        ["Upload de Arquivo", "URL direta (Firebase)", "URL de vídeo (YouTube, Vimeo, etc)"]
+        ["Upload de Arquivo", "URL de vídeo (YouTube, Vimeo, etc)"]
     )
 
     audio_bytes = None
@@ -81,21 +81,6 @@ def run_app():
                 tmp.write(audio_bytes)
                 tmp_path = tmp.name
             st.write("Arquivo carregado e salvo em:", tmp_path)
-
-    elif opcao_input == "URL direta (Firebase)":
-        audio_url = st.text_input("Cole a URL direta do arquivo de áudio ou vídeo")
-        if audio_url:
-            try:
-                response = requests.get(audio_url)
-                response.raise_for_status()
-                audio_bytes = response.content
-                audio_name = audio_url.split("/")[-1]
-                with tempfile.NamedTemporaryFile(delete=False, suffix=Path(audio_name).suffix) as tmp:
-                    tmp.write(audio_bytes)
-                    tmp_path = tmp.name
-                st.write("Arquivo baixado e salvo em:", tmp_path)
-            except Exception as e:
-                st.error(f"Erro ao baixar o arquivo: {e}")
 
     elif opcao_input == "URL de vídeo (YouTube, Vimeo, etc)":
         video_url = st.text_input("Cole a URL do vídeo (YouTube, Vimeo, etc)")
